@@ -1,0 +1,21 @@
+{
+  "name": "newageerp/sf-event-listener",
+  "type": "symfony-bundle",
+  "autoload": {
+    "psr-4": {
+      "Newageerp\\SfEventListener\\": ""
+    }
+  },
+  "require": {
+    "doctrine/orm": "^2",
+    "newageerp/sf-base-entity": "^0",
+    "nelmio/api-doc-bundle": "^4"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Arturas Jegorenkovas",
+      "email": "info@newageerp.com"
+    }
+  ]
+}
