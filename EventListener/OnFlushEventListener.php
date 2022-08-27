@@ -7,9 +7,9 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Newageerp\SfEventListener\OnInsertEvent;
-use Newageerp\SfEventListener\OnRemoveEvent;
-use Newageerp\SfEventListener\OnUpdateEvent;
+use Newageerp\SfEventListener\Events\OnInsertEvent;
+use Newageerp\SfEventListener\Events\OnRemoveEvent;
+use Newageerp\SfEventListener\Events\OnUpdateEvent;
 
 class OnFlushEventListener
 {
