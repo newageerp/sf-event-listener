@@ -26,7 +26,7 @@ class BgRequestEvent {
                 'event' => $this->event,
                 'id' => $this->id,
                 'data' => $this->data,
-                'url' => $_ENV['FRONT_URL']
+                'url' => $_ENV['FRONT_REMOTE_URL']
             ]
         );
     }
