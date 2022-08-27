@@ -60,6 +60,7 @@ class OnFlushEventListener
     {
         foreach ($this->insertions as $entity) {
             $event = new OnInsertEvent($entity);
+            $this->evtd->dispatch($event, OnInsertEvent::NAME);
         }
 
         foreach ($this->updates as $updateData) {
@@ -67,12 +68,12 @@ class OnFlushEventListener
             $changes = $updateData['changes'];
 
             $event = new OnUpdateEvent($entity, $changes);
-            $this->eventDispatcher->dispatch($event, OnUpdateEvent::NAME);
+            $this->evtd->dispatch($event, OnUpdateEvent::NAME);
         }
 
         foreach ($this->removes as $entity) {
             $event = new OnRemoveEvent($entity);
-            $this->eventDispatcher->dispatch($event, OnRemoveEvent::NAME);
+            $this->evtd->dispatch($event, OnRemoveEvent::NAME);
         }
 
         $this->insertions = [];
