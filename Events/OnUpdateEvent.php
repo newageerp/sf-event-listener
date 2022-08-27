@@ -39,4 +39,28 @@ class OnUpdateEvent extends Event {
 
         return $this;
     }
+
+    /**
+     * Get the value of changes
+     *
+     * @return array
+     */
+    public function getChanges(): array
+    {
+        return $this->changes;
+    }
+
+    /**
+     * Set the value of changes
+     *
+     * @param array $changes
+     *
+     * @return self
+     */
+    public function setChanges(array $changes): self
+    {
+        $this->changes = $changes;
+
+        return $this;
+    }
 }
