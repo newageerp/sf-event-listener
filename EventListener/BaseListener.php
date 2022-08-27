@@ -47,9 +47,11 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                         $callableParams[$key] = $onInsertEvent->getEntity();
                         $needCall = true;
                     }
+                    if ($paramType === $onInsertEvent::class) {
+                        $callableParams[$key] = $onInsertEvent;
+                    }
                 }
                 if ($needCall) {
-                    $callableParams[] = $onInsertEvent;
                     [$this, $method](...$callableParams);
                 }
             }
@@ -67,9 +69,11 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                         $callableParams[$key] = $onUpdateEvent->getEntity();
                         $needCall = true;
                     }
+                    if ($paramType === $onUpdateEvent::class) {
+                        $callableParams[$key] = $onUpdateEvent;
+                    }
                 }
                 if ($needCall) {
-                    $callableParams[] = $onUpdateEvent;
                     [$this, $method](...$callableParams);
                 }
             }
@@ -87,9 +91,11 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                         $callableParams[$key] = $onRemoveEvent->getEntity();
                         $needCall = true;
                     }
+                    if ($paramType === $onRemoveEvent::class) {
+                        $callableParams[$key] = $onRemoveEvent;
+                    }
                 }
                 if ($needCall) {
-                    $callableParams[] = $onRemoveEvent;
                     [$this, $method](...$callableParams);
                 }
             }
