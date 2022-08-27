@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfEventListener\EventListener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Newageerp\SfEventListener\Events\OnInsertEvent;
 use Newageerp\SfEventListener\Events\OnRemoveEvent;
 use Newageerp\SfEventListener\Events\OnUpdateEvent;
@@ -12,13 +13,17 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 {
     protected LoggerInterface $ajLogger;
 
+    protected EntityManagerInterface $em;
+
     protected array $blacklistMethods = ['onInsert', 'onUpdate', 'onRemove'];
 
     protected array $methodWithParams = [];
 
-    public function __construct(LoggerInterface $ajLogger)
+    public function __construct(LoggerInterface $ajLogger, EntityManagerInterface $em)
     {
         $this->ajLogger = $ajLogger;
+        $this->em = $em;
+
         $methods = get_class_methods($this);
         foreach ($methods as $method) {
             if (strpos($method, 'on') === 0 && !in_array($method, $this->blacklistMethods)) {
@@ -105,7 +110,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
     public static function getSubscribedEvents()
     {
         $key = static::class;
-        
+
         return [
             OnInsertEvent::NAME => 'onInsert',
             OnUpdateEvent::NAME => 'onUpdate',
@@ -134,6 +139,30 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
     public function setAjLogger(LoggerInterface $ajLogger): self
     {
         $this->ajLogger = $ajLogger;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of em
+     *
+     * @return EntityManagerInterface
+     */
+    public function getEm(): EntityManagerInterface
+    {
+        return $this->em;
+    }
+
+    /**
+     * Set the value of em
+     *
+     * @param EntityManagerInterface $em
+     *
+     * @return self
+     */
+    public function setEm(EntityManagerInterface $em): self
+    {
+        $this->em = $em;
 
         return $this;
     }
