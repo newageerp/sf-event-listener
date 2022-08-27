@@ -167,7 +167,8 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
         return $this;
     }
 
-    public function addLog(string $message) {
-        $this->getAjLogger($this::class.' '.$message);
+    public function addLog(string $message)
+    {
+        $this->getAjLogger()->warning($this::class . ' ' . $message);
     }
 }
