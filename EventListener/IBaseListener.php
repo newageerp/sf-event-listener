@@ -1,6 +1,8 @@
 <?php
 namespace Newageerp\SfEventListener\EventListener;
 
+use Newageerp\SfEventListener\Events\BgCallbackEvent;
+
 interface IBaseListener {
-    public function onBgCall(int $id, array $data);
+    public function onBgCall(BgCallbackEvent $event);
 }
