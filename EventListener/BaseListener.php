@@ -104,10 +104,13 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 
     public static function getSubscribedEvents()
     {
+        $key = static::class;
+        
         return [
             OnInsertEvent::NAME => 'onInsert',
             OnUpdateEvent::NAME => 'onUpdate',
             OnRemoveEvent::NAME => 'onRemove',
+            $key => 'onBgCall'
         ];
     }
 
