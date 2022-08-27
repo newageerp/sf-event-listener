@@ -34,5 +34,7 @@ class EventListenerController extends OaBaseController
 
         $event = new BgCallbackEvent($id, $data);
         $this->evtd->dispatch($event, $eventName);
+
+        return $this->json(['success' => 1]);
     }
 }
