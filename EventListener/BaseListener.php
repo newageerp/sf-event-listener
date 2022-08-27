@@ -8,7 +8,7 @@ use Newageerp\SfEventListener\Events\OnUpdateEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class BaseListener implements EventSubscriberInterface
+abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 {
     protected LoggerInterface $ajLogger;
 
@@ -69,7 +69,6 @@ class BaseListener implements EventSubscriberInterface
                     }
                 }
                 if ($needCall) {
-                    $callableParams[] = $onUpdateEvent->getChanges();
                     $callableParams[] = $onUpdateEvent;
                     [$this, $method](...$callableParams);
                 }
