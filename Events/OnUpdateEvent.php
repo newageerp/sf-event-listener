@@ -10,6 +10,11 @@ class OnUpdateEvent extends Event {
 
     protected array $changes;
 
+    /**
+     * @var BgRequestEvent[] $requests
+     */
+    protected array $requests = [];
+
     public function __construct(object $entity, array $changes)
     {
         $this->entity = $entity;
@@ -60,6 +65,30 @@ class OnUpdateEvent extends Event {
     public function setChanges(array $changes): self
     {
         $this->changes = $changes;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of requests
+     *
+     * @return array
+     */
+    public function getRequests(): array
+    {
+        return $this->requests;
+    }
+
+    /**
+     * Set the value of requests
+     *
+     * @param array $requests
+     *
+     * @return self
+     */
+    public function setRequests(array $requests): self
+    {
+        $this->requests = $requests;
 
         return $this;
     }

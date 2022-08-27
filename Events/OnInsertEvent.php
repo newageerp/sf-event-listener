@@ -10,6 +10,11 @@ class OnInsertEvent extends Event
 
     protected object $entity;
 
+    /**
+     * @var BgRequestEvent[] $requests
+     */
+    protected array $requests = [];
+
     public function __construct(object $entity)
     {
         $this->entity = $entity;
@@ -35,6 +40,30 @@ class OnInsertEvent extends Event
     public function setEntity(object $entity): self
     {
         $this->entity = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of requests
+     *
+     * @return array
+     */
+    public function getRequests(): array
+    {
+        return $this->requests;
+    }
+
+    /**
+     * Set the value of requests
+     *
+     * @param array $requests
+     *
+     * @return self
+     */
+    public function setRequests(array $requests): self
+    {
+        $this->requests = $requests;
 
         return $this;
     }

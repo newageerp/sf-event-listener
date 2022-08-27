@@ -8,7 +8,7 @@ use Newageerp\SfEventListener\Events\OnUpdateEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-abstract class BaseListener implements EventSubscriberInterface, IBaseListener
+class BaseListener implements EventSubscriberInterface
 {
     protected LoggerInterface $ajLogger;
 
@@ -68,7 +68,8 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                     }
                 }
                 if ($needCall) {
-                    [$this, $method](...$callableParams, $onUpdateEvent->getChanges());
+                    $callableParams[] = $onUpdateEvent->getChanges();
+                    [$this, $method](...$callableParams);
                 }
             }
         }
@@ -95,12 +96,10 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 
     public static function getSubscribedEvents()
     {
-        $classKey = static::class;
         return [
             OnInsertEvent::NAME => 'onInsert',
             OnUpdateEvent::NAME => 'onUpdate',
             OnRemoveEvent::NAME => 'onRemove',
-            $classKey => 'onBgCall'
         ];
     }
 
