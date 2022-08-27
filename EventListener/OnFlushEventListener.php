@@ -44,7 +44,12 @@ class OnFlushEventListener
         $this->ajLogger = $ajLogger;
         $this->evtd = $evtd;
 
-        $this->connection = new AMQPStreamConnection($_ENV['NAE_SFS_RBQ_HOST'], (int)$_ENV['NAE_SFS_RBQ_PORT'], $_ENV['NAE_SFS_RBQ_USER'], $_ENV['NAE_SFS_RBQ_PASSWORD']);
+        $this->connection = new AMQPStreamConnection(
+            $_ENV['NAE_SFS_RBQ_HOST'],
+            (int)$_ENV['NAE_SFS_RBQ_PORT'],
+            $_ENV['NAE_SFS_RBQ_USER'],
+            $_ENV['NAE_SFS_RBQ_PASSWORD']
+        );
         $this->channel = $this->connection->channel();
 
         $this->insertions = [];

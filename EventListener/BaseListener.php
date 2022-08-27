@@ -49,6 +49,7 @@ class BaseListener implements EventSubscriberInterface
                     }
                 }
                 if ($needCall) {
+                    $callableParams[] = $onInsertEvent;
                     [$this, $method](...$callableParams);
                 }
             }
@@ -69,6 +70,7 @@ class BaseListener implements EventSubscriberInterface
                 }
                 if ($needCall) {
                     $callableParams[] = $onUpdateEvent->getChanges();
+                    $callableParams[] = $onUpdateEvent;
                     [$this, $method](...$callableParams);
                 }
             }
@@ -88,6 +90,7 @@ class BaseListener implements EventSubscriberInterface
                     }
                 }
                 if ($needCall) {
+                    $callableParams[] = $onRemoveEvent;
                     [$this, $method](...$callableParams);
                 }
             }
