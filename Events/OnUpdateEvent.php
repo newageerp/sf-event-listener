@@ -92,4 +92,8 @@ class OnUpdateEvent extends Event {
 
         return $this;
     }
+
+    public function addRequest(BgRequestEvent $event) {
+        $this->requests[] = $event;
+    }
 }

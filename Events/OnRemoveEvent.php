@@ -67,4 +67,8 @@ class OnRemoveEvent extends Event
 
         return $this;
     }
+
+    public function addRequest(BgRequestEvent $event) {
+        $this->requests[] = $event;
+    }
 }
