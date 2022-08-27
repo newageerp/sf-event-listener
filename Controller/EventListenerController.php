@@ -14,13 +14,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class EventListenerController extends OaBaseController
 {
-    protected EventDispatcherInterface $evtd;
-
-    public function __construct(
-        EventDispatcherInterface $evtd,
-    ) {
-        $this->evtd = $evtd;
-    }
     /**
      * @Route(path="/callback", methods={"POST"})
      */
@@ -33,7 +26,7 @@ class EventListenerController extends OaBaseController
         $data = $request->get('data');
 
         $event = new BgCallbackEvent($id, $data);
-        $this->evtd->dispatch($event, $eventName);
+        $this->getEventDispatcher()->dispatch($event, $eventName);
 
         $this->sendSocketPool();
 
