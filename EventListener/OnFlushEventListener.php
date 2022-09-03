@@ -7,14 +7,11 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Newageerp\SfEventListener\Events\BgRequestEvent;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Newageerp\SfEventListener\Events\OnInsertEvent;
-use Newageerp\SfEventListener\Events\OnPreRemoveEvent;
 use Newageerp\SfEventListener\Events\OnRemoveEvent;
 use Newageerp\SfEventListener\Events\OnUpdateEvent;
 
-use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -32,7 +29,6 @@ class OnFlushEventListener
     protected array $insertions = [];
     protected array $updates = [];
     protected array $removes = [];
-    protected array $preRemoves = [];
 
     public function __destruct()
     {
@@ -58,14 +54,6 @@ class OnFlushEventListener
         $this->insertions = [];
         $this->updates = [];
         $this->removes = [];
-        $this->preRemoves = [];
-    }
-
-    public function preRemove(LifecycleEventArgs $args): void
-    {
-        $entity = $args->getObject();
-
-        $this->preRemoves[] = $entity;
     }
 
     public function onFlush(OnFlushEventArgs $onFlushEventArgs)
@@ -74,7 +62,7 @@ class OnFlushEventListener
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
-            $this->removes[] = $entity;
+            $this->removes[] = ['entity' => $entity, 'id' => $entity->getId()];
         }
 
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
@@ -127,20 +115,9 @@ class OnFlushEventListener
             );
         }
 
-        foreach ($this->preRemoves as $entity) {
-            $event = new OnPreRemoveEvent($entity);
-            $this->evtd->dispatch($event, OnPreRemoveEvent::NAME);
-
-            $requests = array_merge(
-                $requests,
-                $event->getRequests()
-            );
-        }
-
         $this->insertions = [];
         $this->updates = [];
         $this->removes = [];
-        $this->preRemoves = [];
 
         foreach ($requests as $request) {
             $msg = new AMQPMessage((string)$request);
