@@ -16,7 +16,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 
     protected EntityManagerInterface $em;
 
-    protected array $blacklistMethods = ['onInsert', 'onUpdate', 'onRemove'];
+    protected array $blacklistMethods = ['onInsert', 'onUpdate', 'onRemove', 'onPreRemove'];
 
     protected array $methodWithParams = [];
 
