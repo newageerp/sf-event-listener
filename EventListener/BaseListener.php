@@ -4,6 +4,7 @@ namespace Newageerp\SfEventListener\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Newageerp\SfEventListener\Events\OnInsertEvent;
+use Newageerp\SfEventListener\Events\OnPreRemoveEvent;
 use Newageerp\SfEventListener\Events\OnRemoveEvent;
 use Newageerp\SfEventListener\Events\OnUpdateEvent;
 use Psr\Log\LoggerInterface;
@@ -36,6 +37,30 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                     },
                     $params
                 );
+            }
+        }
+    }
+
+    public function onPreRemove(OnPreRemoveEvent $onPreRemoveEvent) {
+        foreach ($this->getMethodWithParams() as $method => $params) {
+            if ($method === 'onPreRemoveAll') {
+                [$this, $method]($onPreRemoveEvent->getEntity(), $onPreRemoveEvent);
+            } else if (strpos($method, 'onPreRemove') === 0) {
+                $callableParams = [];
+                $needCall = false;
+                foreach ($params as $key => $paramType) {
+                    $callableParams[$key] = null;
+                    if ($paramType === $onPreRemoveEvent->getEntity()::class) {
+                        $callableParams[$key] = $onPreRemoveEvent->getEntity();
+                        $needCall = true;
+                    }
+                    if ($paramType === $onPreRemoveEvent::class) {
+                        $callableParams[$key] = $onPreRemoveEvent;
+                    }
+                }
+                if ($needCall) {
+                    [$this, $method](...$callableParams);
+                }
             }
         }
     }
@@ -121,6 +146,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
             OnInsertEvent::NAME => 'onInsert',
             OnUpdateEvent::NAME => 'onUpdate',
             OnRemoveEvent::NAME => 'onRemove',
+            OnPreRemoveEvent::NAME => 'onPreRemove',
             $key => 'onBgCall'
         ];
     }
