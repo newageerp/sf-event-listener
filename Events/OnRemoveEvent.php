@@ -10,14 +10,17 @@ class OnRemoveEvent extends Event
 
     protected object $entity;
 
+    protected int $id;
+
     /**
      * @var BgRequestEvent[] $requests
      */
     protected array $requests = [];
 
-    public function __construct(object $entity)
+    public function __construct(object $entity, int $id)
     {
         $this->entity = $entity;
+        $this->id = $id;
     }
 
     /**
@@ -70,5 +73,29 @@ class OnRemoveEvent extends Event
 
     public function addRequest(BgRequestEvent $event) {
         $this->requests[] = $event;
+    }
+
+    /**
+     * Get the value of id
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @param int $id
+     *
+     * @return self
+     */
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 }

@@ -105,8 +105,11 @@ class OnFlushEventListener
             );
         }
 
-        foreach ($this->removes as $entity) {
-            $event = new OnRemoveEvent($entity);
+        foreach ($this->removes as $removeData) {
+            $entity = $removeData['entity'];
+            $id = $removeData['id'];
+
+            $event = new OnRemoveEvent($entity, $id);
             $this->evtd->dispatch($event, OnRemoveEvent::NAME);
 
             $requests = array_merge(
