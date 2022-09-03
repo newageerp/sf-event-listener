@@ -42,8 +42,10 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 
     public function onInsert(OnInsertEvent $onInsertEvent)
     {
-        foreach ($this->methodWithParams as $method => $params) {
-            if (strpos($method, 'onInsert') === 0) {
+        foreach ($this->getMethodWithParams() as $method => $params) {
+            if ($method === 'onInsertAll') {
+                [$this, $method]($onInsertEvent->getEntity(), $onInsertEvent);
+            } else if (strpos($method, 'onInsert') === 0) {
                 $callableParams = [];
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
@@ -64,8 +66,10 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
     }
     public function onUpdate(OnUpdateEvent $onUpdateEvent)
     {
-        foreach ($this->methodWithParams as $method => $params) {
-            if (strpos($method, 'onUpdate') === 0) {
+        foreach ($this->getMethodWithParams() as $method => $params) {
+            if ($method === 'onUpdateAll') {
+                [$this, $method]($onUpdateEvent->getEntity(), $onUpdateEvent);
+            } else if (strpos($method, 'onUpdate') === 0) {
                 $callableParams = [];
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
@@ -86,8 +90,10 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
     }
     public function onRemove(OnRemoveEvent $onRemoveEvent)
     {
-        foreach ($this->methodWithParams as $method => $params) {
-            if (strpos($method, 'onRemove') === 0) {
+        foreach ($this->getMethodWithParams() as $method => $params) {
+            if ($method === 'onRemoveAll') {
+                [$this, $method]($onRemoveEvent->getEntity(), $onRemoveEvent);
+            } else if (strpos($method, 'onRemove') === 0) {
                 $callableParams = [];
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
@@ -170,5 +176,29 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
     public function addLog(string $message)
     {
         $this->getAjLogger()->warning($this::class . ' ' . $message);
+    }
+
+    /**
+     * Get the value of methodWithParams
+     *
+     * @return array
+     */
+    public function getMethodWithParams(): array
+    {
+        return $this->methodWithParams;
+    }
+
+    /**
+     * Set the value of methodWithParams
+     *
+     * @param array $methodWithParams
+     *
+     * @return self
+     */
+    public function setMethodWithParams(array $methodWithParams): self
+    {
+        $this->methodWithParams = $methodWithParams;
+
+        return $this;
     }
 }
