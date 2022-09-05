@@ -6,5 +6,15 @@ services:
 
   Newageerp\SfEventListener\EventListener\OnFlushEventListener:
     arguments: [ ]
+    tags:
+      - name: "doctrine.event_listener"
+        event: "onFlush"
+        priority: 900
+        connection: "default"
+      - name: "doctrine.event_listener"
+        event: "postFlush"
+        priority: 900
+        connection: "default"
   Newageerp\SfEventListener\Controller\EventListenerController:
     arguments: [ ]
+    
