@@ -6,8 +6,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Newageerp\SfEventListener\Events\OnInsertEvent;
 use Newageerp\SfEventListener\Events\OnRemoveEvent;
 use Newageerp\SfEventListener\Events\OnUpdateEvent;
-use Newageerp\Uservice\Events\UBeforeCreateEvent;
-use Newageerp\Uservice\Events\UBeforeUpdateEvent;
+use Newageerp\SfUservice\Events\UBeforeCreateEvent;
+use Newageerp\SfUservice\Events\UBeforeUpdateEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
