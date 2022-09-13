@@ -6,7 +6,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Newageerp\SfEventListener\Events\OnInsertEvent;
 use Newageerp\SfEventListener\Events\OnRemoveEvent;
 use Newageerp\SfEventListener\Events\OnUpdateEvent;
+use Newageerp\SfUservice\Events\UBeforeCreateAfterSetEvent;
 use Newageerp\SfUservice\Events\UBeforeCreateEvent;
+use Newageerp\SfUservice\Events\UBeforeUpdateAfterSetEvent;
 use Newageerp\SfUservice\Events\UBeforeUpdateEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -17,7 +19,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 
     protected EntityManagerInterface $em;
 
-    protected array $blacklistMethods = ['onInsert', 'onUpdate', 'onRemove', 'onBeforeUCreate', 'onBeforeUUpdate'];
+    protected array $blacklistMethods = ['onInsert', 'onUpdate', 'onRemove', 'onBeforeUCreate', 'onBeforeUUpdate', 'onBeforeUCreateAfterSet', 'onBeforeUUpdateAfterSet'];
 
     protected array $methodWithParams = [];
 
@@ -117,9 +119,9 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
 
     public function onBeforeUCreate(UBeforeCreateEvent $event) {
         foreach ($this->getMethodWithParams() as $method => $params) {
-            if ($method === 'onBeforeUCreateAll') {
+            if ($method === 'onUBeforeCreateAll') {
                 [$this, $method]($event->getEntity(), $event);
-            } else if (strpos($method, 'onBeforeUCreate') === 0) {
+            } else if (strpos($method, 'onUBeforeCreate') === 0) {
                 $callableParams = [];
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
@@ -140,9 +142,56 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
     }
     public function onBeforeUUpdate(UBeforeUpdateEvent $event) {
         foreach ($this->getMethodWithParams() as $method => $params) {
-            if ($method === 'onBeforeUUpdateAll') {
+            if ($method === 'onUBeforeUpdateAll') {
                 [$this, $method]($event->getEntity(), $event);
-            } else if (strpos($method, 'onBeforeUUpdate') === 0) {
+            } else if (strpos($method, 'onUBeforeUpdate') === 0) {
+                $callableParams = [];
+                $needCall = false;
+                foreach ($params as $key => $paramType) {
+                    $callableParams[$key] = null;
+                    if ($paramType === $event->getEntity()::class) {
+                        $callableParams[$key] = $event->getEntity();
+                        $needCall = true;
+                    }
+                    if ($paramType === $event::class) {
+                        $callableParams[$key] = $event;
+                    }
+                }
+                if ($needCall) {
+                    [$this, $method](...$callableParams);
+                }
+            }
+        }
+    }
+
+    public function onBeforeUCreateAfterSet(UBeforeCreateAfterSetEvent $event) {
+        foreach ($this->getMethodWithParams() as $method => $params) {
+            if ($method === 'onUBeforeCreateAfterSetAll') {
+                [$this, $method]($event->getEntity(), $event);
+            } else if (strpos($method, 'onUBeforeCreateAfterSet') === 0) {
+                $callableParams = [];
+                $needCall = false;
+                foreach ($params as $key => $paramType) {
+                    $callableParams[$key] = null;
+                    if ($paramType === $event->getEntity()::class) {
+                        $callableParams[$key] = $event->getEntity();
+                        $needCall = true;
+                    }
+                    if ($paramType === $event::class) {
+                        $callableParams[$key] = $event;
+                    }
+                }
+                if ($needCall) {
+                    [$this, $method](...$callableParams);
+                }
+            }
+        }
+    }
+    public function onBeforeUUpdateAfterSet(UBeforeUpdateAfterSetEvent $event) {
+        foreach ($this->getMethodWithParams() as $method => $params) {
+            if ($method === 'onUBeforeUpdateAfterSetAll') {
+                [$this, $method]($event->getEntity(), $event);
+            } else if (strpos($method, 'onUBeforeUpdateAfterSet') === 0) {
                 $callableParams = [];
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
@@ -169,6 +218,8 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
         return [
             UBeforeCreateEvent::NAME => 'onBeforeUCreate',
             UBeforeUpdateEvent::NAME => 'onBeforeUUpdate',
+            UBeforeCreateAfterSetEvent::NAME => 'onBeforeUCreateAfterSet',
+            UBeforeUpdateAfterSetEvent::NAME => 'onBeforeUUpdateAfterSet',
             OnInsertEvent::NAME => 'onInsert',
             OnUpdateEvent::NAME => 'onUpdate',
             OnRemoveEvent::NAME => 'onRemove',
