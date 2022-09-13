@@ -121,7 +121,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
         foreach ($this->getMethodWithParams() as $method => $params) {
             if ($method === 'onUBeforeCreateAll') {
                 [$this, $method]($event->getEntity(), $event);
-            } else if (strpos($method, 'onUBeforeCreate') === 0) {
+            } else if (strpos($method, 'onUBeforeCreate') === 0 && strpos($method, 'onUBeforeCreateAfterSet') !== 0) {
                 $callableParams = [];
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
@@ -144,7 +144,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
         foreach ($this->getMethodWithParams() as $method => $params) {
             if ($method === 'onUBeforeUpdateAll') {
                 [$this, $method]($event->getEntity(), $event);
-            } else if (strpos($method, 'onUBeforeUpdate') === 0) {
+            } else if (strpos($method, 'onUBeforeUpdate') === 0 && strpos($method, 'onUBeforeUpdateAfterSet') !== 0) {
                 $callableParams = [];
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
