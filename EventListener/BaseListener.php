@@ -54,7 +54,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
                     $callableParams[$key] = null;
-                    if ($paramType === $onInsertEvent->getEntity()::class) {
+                    if ($paramType === $onInsertEvent->getEntity()::class || 'Proxies\__CG__\\' . $paramType === $onInsertEvent->getEntity()::class) {
                         $callableParams[$key] = $onInsertEvent->getEntity();
                         $needCall = true;
                     }
@@ -78,7 +78,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
                     $callableParams[$key] = null;
-                    if ($paramType === $onUpdateEvent->getEntity()::class) {
+                    if ($paramType === $onUpdateEvent->getEntity()::class || 'Proxies\__CG__\\' . $paramType === $onUpdateEvent->getEntity()::class) {
                         $callableParams[$key] = $onUpdateEvent->getEntity();
                         $needCall = true;
                     }
@@ -102,7 +102,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
                     $callableParams[$key] = null;
-                    if ($paramType === $onRemoveEvent->getEntity()::class) {
+                    if ($paramType === $onRemoveEvent->getEntity()::class || 'Proxies\__CG__\\' . $paramType === $onRemoveEvent->getEntity()::class) {
                         $callableParams[$key] = $onRemoveEvent->getEntity();
                         $needCall = true;
                     }
@@ -117,7 +117,8 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
         }
     }
 
-    public function onBeforeUCreate(UBeforeCreateEvent $event) {
+    public function onBeforeUCreate(UBeforeCreateEvent $event)
+    {
         foreach ($this->getMethodWithParams() as $method => $params) {
             if ($method === 'onUBeforeCreateAll') {
                 [$this, $method]($event->getEntity(), $event);
@@ -126,7 +127,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
                     $callableParams[$key] = null;
-                    if ($paramType === $event->getEntity()::class) {
+                    if ($paramType === $event->getEntity()::class || 'Proxies\__CG__\\' . $paramType === $event->getEntity()::class) {
                         $callableParams[$key] = $event->getEntity();
                         $needCall = true;
                     }
@@ -140,7 +141,8 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
             }
         }
     }
-    public function onBeforeUUpdate(UBeforeUpdateEvent $event) {
+    public function onBeforeUUpdate(UBeforeUpdateEvent $event)
+    {
         foreach ($this->getMethodWithParams() as $method => $params) {
             if ($method === 'onUBeforeUpdateAll') {
                 [$this, $method]($event->getEntity(), $event);
@@ -149,7 +151,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
                     $callableParams[$key] = null;
-                    if ($paramType === $event->getEntity()::class) {
+                    if ($paramType === $event->getEntity()::class || 'Proxies\__CG__\\' . $paramType === $event->getEntity()::class) {
                         $callableParams[$key] = $event->getEntity();
                         $needCall = true;
                     }
@@ -164,7 +166,8 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
         }
     }
 
-    public function onBeforeUCreateAfterSet(UBeforeCreateAfterSetEvent $event) {
+    public function onBeforeUCreateAfterSet(UBeforeCreateAfterSetEvent $event)
+    {
         foreach ($this->getMethodWithParams() as $method => $params) {
             if ($method === 'onUBeforeCreateAfterSetAll') {
                 [$this, $method]($event->getEntity(), $event);
@@ -173,7 +176,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
                     $callableParams[$key] = null;
-                    if ($paramType === $event->getEntity()::class) {
+                    if ($paramType === $event->getEntity()::class || 'Proxies\__CG__\\' . $paramType === $event->getEntity()::class) {
                         $callableParams[$key] = $event->getEntity();
                         $needCall = true;
                     }
@@ -187,7 +190,8 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
             }
         }
     }
-    public function onBeforeUUpdateAfterSet(UBeforeUpdateAfterSetEvent $event) {
+    public function onBeforeUUpdateAfterSet(UBeforeUpdateAfterSetEvent $event)
+    {
         foreach ($this->getMethodWithParams() as $method => $params) {
             if ($method === 'onUBeforeUpdateAfterSetAll') {
                 [$this, $method]($event->getEntity(), $event);
@@ -196,7 +200,7 @@ abstract class BaseListener implements EventSubscriberInterface, IBaseListener
                 $needCall = false;
                 foreach ($params as $key => $paramType) {
                     $callableParams[$key] = null;
-                    if ($paramType === $event->getEntity()::class) {
+                    if ($paramType === $event->getEntity()::class || 'Proxies\__CG__\\' . $paramType === $event->getEntity()::class) {
                         $callableParams[$key] = $event->getEntity();
                         $needCall = true;
                     }
